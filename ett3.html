@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arabic Verb Etymology Finder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        #typeBar {
+            width: 100%;
+            padding: 10px;
+            font-size: 1.2em;
+            text-align: right;
+            direction: rtl;
+        }
+        #letterPanel {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 5px;
+            margin-top: 10px;
+        }
+        .letterButton {
+            width: 40px;
+            height: 40px;
+            font-size: 1.5em;
+            cursor: pointer;
+            background-color: #f0f0f0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        #findButton {
+            margin-top: 15px;
+            padding: 10px 20px;
+            font-size: 1.2em;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 1.1em;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Arabic Verb Etymology Finder</h2>
+        <input id="typeBar" type="text" placeholder="Enter an Arabic verb here" readonly>
+        <div id="letterPanel">
+            <!-- Arabic letter buttons -->
+            <button class="letterButton" onclick="addLetter('ا')">ا</button>
+            <button class="letterButton" onclick="addLetter('ب')">ب</button>
+            <button class="letterButton" onclick="addLetter('ت')">ت</button>
+            <button class="letterButton" onclick="addLetter('ث')">ث</button>
+            <button class="letterButton" onclick="addLetter('ج')">ج</button>
+            <button class="letterButton" onclick="addLetter('ح')">ح</button>
+            <button class="letterButton" onclick="addLetter('خ')">خ</button>
+            <button class="letterButton" onclick="addLetter('د')">د</button>
+            <button class="letterButton" onclick="addLetter('ذ')">ذ</button>
+            <button class="letterButton" onclick="addLetter('ر')">ر</button>
+            <button class="letterButton" onclick="addLetter('ز')">ز</button>
+            <button class="letterButton" onclick="addLetter('س')">س</button>
+            <button class="letterButton" onclick="addLetter('ش')">ش</button>
+            <button class="letterButton" onclick="addLetter('ص')">ص</button>
+            <button class="letterButton" onclick="addLetter('ض')">ض</button>
+            <button class="letterButton" onclick="addLetter('ط')">ط</button>
+            <button class="letterButton" onclick="addLetter('ظ')">ظ</button>
+            <button class="letterButton" onclick="addLetter('ع')">ع</button>
+            <button class="letterButton" onclick="addLetter('غ')">غ</button>
+            <button class="letterButton" onclick="addLetter('ف')">ف</button>
+            <button class="letterButton" onclick="addLetter('ق')">ق</button>
+            <button class="letterButton" onclick="addLetter('ك')">ك</button>
+            <button class="letterButton" onclick="addLetter('ل')">ل</button>
+            <button class="letterButton" onclick="addLetter('م')">م</button>
+            <button class="letterButton" onclick="addLetter('ن')">ن</button>
+            <button class="letterButton" onclick="addLetter('ه')">ه</button>
+            <button class="letterButton" onclick="addLetter('و')">و</button>
+            <button class="letterButton" onclick="addLetter('ي')">ي</button>
+        </div>
+        <button id="findButton" onclick="findEtymology()">Find</button>
+        <div id="result"></div>
+    </div>
+
+    <script>
+        // Function to add letter to the type bar
+        function addLetter(letter) {
+            document.getElementById('typeBar').value += letter;
+        }
+
+        // Database for Arabic verb etymology
+        const etymologyData = {
+            'آمن': 'To believe, to have faith. Often used to express belief in Allah, the prophets, and the scriptures.',
+            'عبد': 'To worship, to serve. This verb is central to discussing worship of Allah alone.',
+            'خلق': 'To create. Used for Allah’s act of creation, indicating His power over all things.',
+            'جعل': 'To make, to appoint. Used to describe Allah’s designation of roles and purposes for creation.',
+            'رحم': 'To have mercy. Refers to Allah’s mercy and compassion towards His creation.',
+            'قتل': 'To kill. Often appears in legal and moral contexts related to justice and injustice.',
+            'أكل': 'To eat. Used both literally and metaphorically, sometimes discussing lawful sustenance.',
+            'سمع': 'To hear. Indicates Allah’s all-hearing attribute or the importance of listening to divine messages.',
+            'علم': 'To know. Related to knowledge and understanding, often in reference to Allah’s omniscience.',
+            'ذكر': 'To remember, to mention. Encourages remembrance of Allah or recounting of divine blessings.',
+            'صبر': 'To be patient, to endure. Emphasizes patience in trials as a key virtue for believers.',
+            'كتب': 'To write, to prescribe. Often used to denote divine decree or the revelation of scriptures.',
+            'هدى': 'To guide. Refers to Allah’s guidance and the direction provided to believers.',
+            'وعد': 'To promise. Used in contexts of promises, both rewards and warnings from Allah.',
+            'أطاع': 'To obey. Stresses the importance of obedience to Allah and His messengers.',
+            'دخل': 'To enter. Often used in descriptions of entering paradise, homes, or spiritual states.',
+            'نصر': 'To help, to support. Conveys support from Allah or from believers towards one another.',
+            'كذب': 'To lie, to deny. Used regarding denial of truth, especially in reference to rejecting prophets or messages.',
+            'قرأ': 'To read, to recite. Refers to the act of recitation, especially of the Quran itself.',
+            'شكر': 'To thank, to be grateful. Encourages gratitude towards Allah for His blessings.'
+        };
+
+        // Function to find etymology of entered verb
+        function findEtymology() {
+            const typeBar = document.getElementById('typeBar');
+            const verb = typeBar.value;
+            const etymology = etymologyData[verb];
+
+            // Check if etymology exists for the entered verb
+            if (etymology) {
+                document.getElementById('result').innerText = etymology;
+            } else {
+                document.getElementById('result').innerText = 'Etymology not found for this verb. Please try a different verb.';
+            }
+
+            // Clear the type bar after searching
+            typeBar.value = '';
+        }
+    </script>
+</body>
+</html>
